@@ -27,6 +27,10 @@ public class MyGdxGame extends Game {
 		manager.load("space.jpg", Texture.class);
 		manager.load("laserBlue02.png", Texture.class);
 		manager.load("laserBlue12.png", Texture.class);
+		manager.load("laserYellow_burst.png", Texture.class);
+		manager.load("sfx_lose.wav", Sound.class);
+		manager.load("sfx_laser1.wav", Sound.class);
+		manager.load("explosion.wav", Sound.class);
 		manager.finishLoading();
 		//
 		batch = new SpriteBatch();

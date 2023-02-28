@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
@@ -42,6 +43,7 @@ public class Player extends Actor {
         bounds.set(getX(), getY(), getWidth(), getHeight());
         if(bulletTime <= 0) {
             bullets.get(bulletIndex).shoot(getX() + getWidth(), getY());
+            manager.get("sfx_laser1.wav", Sound.class).play();
             bulletIndex++;
             if (bulletIndex >= bullets.size) {
                 bulletIndex = 0;

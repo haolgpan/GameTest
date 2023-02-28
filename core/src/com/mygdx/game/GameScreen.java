@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -31,7 +32,8 @@ public class GameScreen implements Screen {
     long lastObstacleTime;
     float score;
     float touchY;
-
+    Music bgMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
+    float elapsedTime;
 
     public GameScreen(final MyGdxGame gam) {
         this.game = gam;
@@ -60,6 +62,7 @@ public class GameScreen implements Screen {
                 return true;
             }
         });
+        bgMusic.play();
     }
 
     @Override
@@ -110,6 +113,15 @@ public class GameScreen implements Screen {
                 Bullet bullet = bulletIter.next();
                 if (monsters.getBounds().overlaps(bullet.getBounds())) {
                     iter.remove(); // Elimina el monstre de l'array d'obstacles
+                    game.manager.get("explosion.wav", Sound.class).play();
+                    monsters.remove();
+                    game.batch.begin();
+                    elapsedTime += delta*2;
+                    if (elapsedTime < 10f) {
+                        game.batch.draw(game.manager.get("laserYellow_burst.png", Texture.class), monsters.getX(), monsters.getY(), 50, 50);
+                    }
+                    game.batch.end();
+                    score += 1;
                     //bulletIter.remove(); // Esborra la bala del jugador també
                     break;
                 }
@@ -120,17 +132,17 @@ public class GameScreen implements Screen {
         while (iter.hasNext()) {
             Monsters monsters = iter.next();
             //Puntua per pipes
-            if(player.getX() > monsters.getX() && monsters.scoreAdded == false){
+            /*if(player.getX() > monsters.getX() && monsters.scoreAdded == false){
                 score += 1;
                 monsters.scoreAdded = true;
-            }
+            }*/
             //
             if (monsters.getX() < -64) {
                 obstacles.removeValue(monsters, true);
             }
         }
         if (dead) {
-            //game.manager.get("fail.wav", Sound.class).play();
+            game.manager.get("sfx_lose.wav", Sound.class).play();
             game.lastScore = (int)score;
             if(game.lastScore > game.topScore)
                 game.topScore = game.lastScore;

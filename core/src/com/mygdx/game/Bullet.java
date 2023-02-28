@@ -28,7 +28,7 @@ public class Bullet extends Actor {
 
     public void update(float delta) {
         position.add(velocity.x * delta, velocity.y * delta);
-        bounds.set(getX(), getY(), getWidth(), getHeight());
+        bounds.set(position.x, position.y, getWidth(), getHeight());
         if (position.x > Gdx.graphics.getWidth()) {
             active = false;
         }
